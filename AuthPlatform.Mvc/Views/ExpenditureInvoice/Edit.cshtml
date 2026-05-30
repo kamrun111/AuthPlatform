@@ -1,0 +1,427 @@
+﻿@model ExpenditureInvoiceViewModel
+
+@{
+    ViewData["Title"] = "Edit Expenditure Invoice";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">Edit Expenditure Invoice</h5>
+        </div>
+
+        <div class="card-body">
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Error
+                </div>
+            }
+
+            <form asp-action="Edit" method="post">
+
+                <input asp-for="ExpenditureInvoiceId"
+                       type="hidden" />
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+
+                        <label asp-for="InvoiceNumber"
+                               class="form-label fw-semibold">
+                            Invoice Number
+                        </label>
+
+                        <input asp-for="InvoiceNumber"
+                               class="form-control"
+                               readonly />
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label asp-for="InvoiceDate"
+                               class="form-label fw-semibold">
+                            Invoice Date
+                        </label>
+
+                        <input asp-for="InvoiceDate"
+                               type="date"
+                               class="form-control" />
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label asp-for="ExpenditureHeadId"
+                               class="form-label fw-semibold">
+                            Expenditure Head
+                        </label>
+
+                        <select asp-for="ExpenditureHeadId"
+                                asp-items="ViewBag.ExpenditureHeads"
+                                class="form-select">
+
+                            <option value="">
+                                -- Select Head --
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+
+                    <h5 class="mb-0">
+                        Invoice Details
+                    </h5>
+
+                    <button type="button"
+                            class="btn btn-primary btn-sm"
+                            onclick="addRow()">
+
+                        Add Row
+
+                    </button>
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered align-middle"
+                           id="detailTable">
+
+                        <thead class="table-light">
+
+                            <tr>
+
+                                <th style="width:60px;">SL</th>
+
+                                <th style="width:150px;">
+                                    Expense Date
+                                </th>
+
+                                <th style="width:220px;">
+                                    Item Name
+                                </th>
+
+                                <th style="width:250px;">
+                                    Description
+                                </th>
+
+                                <th style="width:130px;">
+                                    Qty
+                                </th>
+
+                                <th style="width:150px;">
+                                    Unit Price
+                                </th>
+
+                                <th style="width:160px;">
+                                    Line Total
+                                </th>
+
+                                <th style="width:80px;"></th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            @for (int i = 0; i < Model.Details.Count; i++)
+                            {
+                                <tr>
+
+                                    <td class="serial text-center">
+                                        @(i + 1)
+                                    </td>
+
+                                    <td>
+
+                                        <input type="date"
+                                               name="Details[@i].ExpenseDate"
+                                               value="@(Model.Details[i].ExpenseDate?.ToString("yyyy-MM-dd"))"
+                                               class="form-control" />
+
+                                    </td>
+
+                                    <td>
+
+                                        <input asp-for="Details[i].ItemName"
+                                               class="form-control" />
+
+                                    </td>
+
+                                    <td>
+
+                                        <input asp-for="Details[i].Description"
+                                               class="form-control" />
+
+                                    </td>
+
+                                    <td>
+
+                                        <input asp-for="Details[i].Quantity"
+                                               type="number"
+                                               step="0.01"
+                                               class="form-control qty"
+                                               oninput="calculateTotals()" />
+
+                                    </td>
+
+                                    <td>
+
+                                        <input asp-for="Details[i].UnitPrice"
+                                               type="number"
+                                               step="0.01"
+                                               class="form-control unit-price"
+                                               oninput="calculateTotals()" />
+
+                                    </td>
+
+                                    <td>
+
+                                        <input asp-for="Details[i].LineTotal"
+                                               class="form-control line-total text-end"
+                                               readonly />
+
+                                    </td>
+
+                                    <td class="text-center">
+
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm"
+                                                onclick="removeRow(this)">
+
+                                            X
+
+                                        </button>
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                        <tfoot>
+
+                            <tr>
+
+                                <th colspan="6"
+                                    class="text-end">
+
+                                    Total Amount
+
+                                </th>
+
+                                <th>
+
+                                    <input asp-for="TotalAmount"
+                                           class="form-control fw-bold text-end"
+                                           readonly />
+
+                                </th>
+
+                                <th></th>
+
+                            </tr>
+
+                        </tfoot>
+
+                    </table>
+
+                </div>
+
+                <div class="mt-4">
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        Update
+
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary">
+
+                        Back
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        let rowIndex = @Model.Details.Count;
+
+        function addRow() {
+
+            let row = `
+
+                <tr>
+
+                    <td class="serial text-center"></td>
+
+                    <td>
+
+                        <input name="Details[${rowIndex}].ExpenseDate"
+                               type="date"
+                               class="form-control" />
+
+                    </td>
+
+                    <td>
+
+                        <input name="Details[${rowIndex}].ItemName"
+                               class="form-control" />
+
+                    </td>
+
+                    <td>
+
+                        <input name="Details[${rowIndex}].Description"
+                               class="form-control" />
+
+                    </td>
+
+                    <td>
+
+                        <input name="Details[${rowIndex}].Quantity"
+                               type="number"
+                               step="0.01"
+                               class="form-control qty"
+                               oninput="calculateTotals()" />
+
+                    </td>
+
+                    <td>
+
+                        <input name="Details[${rowIndex}].UnitPrice"
+                               type="number"
+                               step="0.01"
+                               class="form-control unit-price"
+                               oninput="calculateTotals()" />
+
+                    </td>
+
+                    <td>
+
+                        <input name="Details[${rowIndex}].LineTotal"
+                               class="form-control line-total text-end"
+                               readonly />
+
+                    </td>
+
+                    <td class="text-center">
+
+                        <button type="button"
+                                class="btn btn-danger btn-sm"
+                                onclick="removeRow(this)">
+
+                            X
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            $('#detailTable tbody').append(row);
+
+            rowIndex++;
+
+            resetSerialNumbers();
+        }
+
+        function removeRow(button) {
+
+            $(button).closest('tr').remove();
+
+            resetSerialNumbers();
+
+            reIndexRows();
+
+            calculateTotals();
+        }
+
+        function resetSerialNumbers() {
+
+            $('#detailTable tbody tr').each(function (index) {
+
+                $(this).find('.serial').text(index + 1);
+
+            });
+        }
+
+        function reIndexRows() {
+
+            $('#detailTable tbody tr').each(function (index) {
+
+                $(this).find('input').each(function () {
+
+                    let name = $(this).attr('name');
+
+                    if (name) {
+
+                        name = name.replace(
+                            /Details\[\d+\]/,
+                            `Details[${index}]`);
+
+                        $(this).attr('name', name);
+                    }
+
+                });
+
+            });
+
+            rowIndex = $('#detailTable tbody tr').length;
+        }
+
+        function calculateTotals() {
+
+            let totalAmount = 0;
+
+            $('#detailTable tbody tr').each(function () {
+
+                let qty =
+                    parseFloat($(this).find('.qty').val()) || 0;
+
+                let unitPrice =
+                    parseFloat($(this).find('.unit-price').val()) || 0;
+
+                let lineTotal = qty * unitPrice;
+
+                $(this).find('.line-total')
+                       .val(lineTotal.toFixed(2));
+
+                totalAmount += lineTotal;
+            });
+
+            $('#TotalAmount')
+                .val(totalAmount.toFixed(2));
+        }
+
+        calculateTotals();
+
+    </script>
+
+}

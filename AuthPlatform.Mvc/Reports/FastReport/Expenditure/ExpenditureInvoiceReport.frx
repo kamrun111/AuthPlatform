@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="05/23/2026 00:00:00" ReportInfo.Modified="05/23/2026 00:00:00" ReportInfo.CreatorVersion="2026.2.1">
+	<Dictionary>
+		<BusinessObjectDataSource Name="InvoiceData" ReferenceName="InvoiceData" DataType="System.Int32" Enabled="true">
+			<Column Name="InvoiceNumber" DataType="System.String"/>
+			<Column Name="InvoiceDate" DataType="System.DateTime"/>
+			<Column Name="ExpenditureHeadName" DataType="System.String"/>
+			<Column Name="ExpenseDate" DataType="System.String"/>
+			<Column Name="ItemName" DataType="System.String"/>
+			<Column Name="Description" DataType="System.String"/>
+			<Column Name="Quantity" DataType="System.Decimal"/>
+			<Column Name="UnitPrice" DataType="System.Decimal"/>
+			<Column Name="LineTotal" DataType="System.Decimal"/>
+			<Column Name="TotalAmount" DataType="System.Decimal"/>
+			<Column Name="PrintDate" DataType="System.DateTime"/>
+			<Column Name="PrintedBy" DataType="System.String"/>
+		</BusinessObjectDataSource>
+	</Dictionary>
+
+	<ReportPage Name="Page1">
+		<PageHeaderBand Name="PageHeader1" Width="718.2" Height="120">
+			<TextObject Name="Text1" Left="180" Top="10" Width="350" Height="30" Text="EXPENDITURE INVOICE" HorzAlign="Center" Font="Arial, 20pt, style=Bold"/>
+			<TextObject Name="Text2" Left="10" Top="55" Width="220" Height="20" Text="Invoice No : [InvoiceData.InvoiceNumber]" Font="Arial, 11pt, style=Bold"/>
+			<TextObject Name="Text3" Left="250" Top="55" Width="220" Height="20" Text="Invoice Date : [FormatDateTime([InvoiceData.InvoiceDate], &quot;dd/MM/yyyy&quot;)]" Font="Arial, 11pt, style=Bold"/>
+			<TextObject Name="Text4" Left="500" Top="55" Width="210" Height="20" Text="Head : [InvoiceData.ExpenditureHeadName]" Font="Arial, 11pt, style=Bold"/>
+
+			<TextObject Name="HeaderExpenseDate" Left="10" Top="90" Width="100" Height="25" Border.Lines="All" Text="Expense Date" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+			<TextObject Name="HeaderItem" Left="110" Top="90" Width="150" Height="25" Border.Lines="All" Text="Item" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+			<TextObject Name="HeaderDescription" Left="260" Top="90" Width="170" Height="25" Border.Lines="All" Text="Description" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+			<TextObject Name="HeaderQty" Left="430" Top="90" Width="70" Height="25" Border.Lines="All" Text="Qty" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+			<TextObject Name="HeaderUnitPrice" Left="500" Top="90" Width="100" Height="25" Border.Lines="All" Text="Unit Price" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+			<TextObject Name="HeaderLineTotal" Left="600" Top="90" Width="110" Height="25" Border.Lines="All" Text="Line Total" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+		</PageHeaderBand>
+
+		<DataBand Name="Data1" Top="125" Width="718.2" Height="28.35" DataSource="InvoiceData">
+			<TextObject Name="TextExpenseDate" Left="10" Width="100" Height="28.35" Border.Lines="All" Text="[InvoiceData.ExpenseDate]" HorzAlign="Center" Font="Arial, 9pt"/>
+			<TextObject Name="Text5" Left="110" Width="150" Height="28.35" Border.Lines="All" Text="[InvoiceData.ItemName]" Font="Arial, 9pt"/>
+			<TextObject Name="Text6" Left="260" Width="170" Height="28.35" Border.Lines="All" Text="[InvoiceData.Description]" Font="Arial, 9pt"/>
+			<TextObject Name="Text7" Left="430" Width="70" Height="28.35" Border.Lines="All" Text="[InvoiceData.Quantity]" HorzAlign="Right" Font="Arial, 9pt"/>
+			<TextObject Name="Text8" Left="500" Width="100" Height="28.35" Border.Lines="All" Text="[InvoiceData.UnitPrice]" HorzAlign="Right" Font="Arial, 9pt"/>
+			<TextObject Name="Text9" Left="600" Width="110" Height="28.35" Border.Lines="All" Text="[InvoiceData.LineTotal]" HorzAlign="Right" Font="Arial, 9pt"/>
+		</DataBand>
+
+		<ReportSummaryBand Name="ReportSummary1" Top="160" Width="718.2" Height="70">
+			<TextObject Name="Text10" Left="480" Top="10" Width="120" Height="20" Text="Grand Total :" Font="Arial, 12pt, style=Bold"/>
+			<TextObject Name="Text11" Left="600" Top="10" Width="110" Height="20" Text="[InvoiceData.TotalAmount]" HorzAlign="Right" Font="Arial, 12pt, style=Bold"/>
+			<TextObject Name="Text12" Left="10" Top="40" Width="250" Height="18" Text="Printed By : [InvoiceData.PrintedBy]" Font="Arial, 9pt, style=Bold"/>
+			<TextObject Name="Text13" Left="450" Top="40" Width="260" Height="18" Text="Print Date : [FormatDateTime([InvoiceData.PrintDate], &quot;dd/MM/yyyy&quot;)]" HorzAlign="Right" Font="Arial, 9pt, style=Bold"/>
+		</ReportSummaryBand>
+	</ReportPage>
+</Report>

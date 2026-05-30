@@ -1,0 +1,172 @@
+AuthPlatform.sln
+│
+├── AuthPlatform.Domain
+│   │
+│   ├── Auth
+│   │   ├── Entities
+│   │   │   ├── AuthUser.cs
+│   │   │   ├── AuthRole.cs
+│   │   │   ├── AuthPermission.cs
+│   │   │   ├── AuthUserPermission.cs
+│   │   │   ├── AuthRolePermission.cs
+│   │   │   ├── AuthLoginHistory.cs
+│   │   │   └── AuthAuditActivity.cs
+│   │   │
+│   │   └── Interfaces
+│   │       ├── IAuthUserRepository.cs
+│   │       ├── IAuthRoleRepository.cs
+│   │       ├── IAuthPermissionRepository.cs
+│   │       ├── IAuthUserPermissionRepository.cs
+│   │       └── IAuthRolePermissionRepository.cs
+│   │
+│   ├── Expenditures
+│   │   ├── Entities
+│   │   │   ├── ExpenditureHead.cs
+│   │   │   ├── ExpenditureInvoice.cs
+│   │   │   └── ExpenditureInvoiceDetail.cs
+│   │   │
+│   │   └── Interfaces
+│   │       ├── IExpenditureHeadRepository.cs
+│   │       ├── IExpenditureInvoiceRepository.cs
+│   │       └── IExpenditureInvoiceDetailRepository.cs
+│   │
+│   └── Common
+│       ├── BaseEntity.cs
+│       └── AuditableEntity.cs
+│
+│
+├── AuthPlatform.Application
+│   │
+│   ├── Auth
+│   │   ├── DTOs
+│   │   ├── Services
+│   │   ├── Validators
+│   │   └── Mappings
+│   │
+│   ├── Expenditures
+│   │   ├── DTOs
+│   │   │   ├── ExpenditureHeadDto.cs
+│   │   │   ├── ExpenditureInvoiceDto.cs
+│   │   │   └── ExpenditureInvoiceDetailDto.cs
+│   │   │
+│   │   ├── Services
+│   │   │   ├── ExpenditureHeadService.cs
+│   │   │   ├── ExpenditureInvoiceService.cs
+│   │   │   └── ExpenditureInvoiceDetailService.cs
+│   │   │
+│   │   ├── Validators
+│   │   │   ├── ExpenditureHeadValidator.cs
+│   │   │   ├── ExpenditureInvoiceValidator.cs
+│   │   │   └── ExpenditureInvoiceDetailValidator.cs
+│   │   │
+│   │   └── Mappings
+│   │       ├── ExpenditureHeadMapping.cs
+│   │       ├── ExpenditureInvoiceMapping.cs
+│   │       └── ExpenditureInvoiceDetailMapping.cs
+│   │
+│   └── Common
+│       └── Helpers
+│
+│
+├── AuthPlatform.Infrastructure
+│   │
+│   ├── Auth
+│   │   ├── EF
+│   │   │   ├── AuthUserRepository.cs
+│   │   │   ├── AuthRoleRepository.cs
+│   │   │   └── AuthPermissionRepository.cs
+│   │   │
+│   │   └── Dapper
+│   │       ├── AuthUserQueryRepository.cs
+│   │       ├── AuthRoleQueryRepository.cs
+│   │       └── AuthPermissionQueryRepository.cs
+│   │
+│   ├── Expenditures
+│   │   ├── EF
+│   │   │   ├── ExpenditureHeadRepository.cs
+│   │   │   ├── ExpenditureInvoiceRepository.cs
+│   │   │   └── ExpenditureInvoiceDetailRepository.cs
+│   │   │
+│   │   └── Dapper
+│   │       ├── ExpenditureHeadQueryRepository.cs
+│   │       ├── ExpenditureInvoiceQueryRepository.cs
+│   │       └── ExpenditureInvoiceDetailQueryRepository.cs
+│   │
+│   ├── Persistence
+│   │   ├── ApplicationDbContext.cs
+│   │   ├── Configurations
+│   │   └── Migrations
+│   │
+│   └── Security
+│       ├── PasswordHasher.cs
+│       └── TokenGenerator.cs
+│
+│
+├── AuthPlatform.Api
+│   │
+│   ├── Auth
+│   │   └── AuthController.cs
+│   │
+│   ├── Expenditures
+│   │   ├── ExpenditureHeadController.cs
+│   │   ├── ExpenditureInvoiceController.cs
+│   │   └── ExpenditureInvoiceDetailController.cs
+│   │
+│   ├── Reports
+│   │   └── ReportController.cs
+│   │
+│   └── Middleware
+│       ├── JwtMiddleware.cs
+│       └── PermissionMiddleware.cs
+│
+│
+└── AuthPlatform.Mvc
+    │
+    ├── Auth
+    │   ├── Controllers
+    │   ├── Models
+    │   ├── Views
+    │   └── Reports
+    │
+    ├── Expenditures
+    │   ├── Controllers
+    │   │   ├── ExpenditureHeadController.cs
+    │   │   ├── ExpenditureInvoiceController.cs
+    │   │   └── ExpenditureInvoiceDetailController.cs
+    │   │
+    │   ├── Models
+    │   │   ├── ExpenditureHeadViewModel.cs
+    │   │   ├── ExpenditureInvoiceViewModel.cs
+    │   │   └── ExpenditureInvoiceDetailViewModel.cs
+    │   │
+    │   ├── Views
+    │   │   ├── ExpenditureHead
+    │   │   ├── ExpenditureInvoice
+    │   │   └── ExpenditureInvoiceDetail
+    │   │
+    │   └── Reports
+    │       ├── ExpenditureHeadReport.rdlc
+    │       ├── ExpenditureInvoiceReport.rdlc
+    │       └── ExpenditureInvoiceDetailReport.rdlc
+    │
+    ├── Reports
+    │   ├── UserPermissionReport.rdlc
+    │   ├── RolePermissionReport.rdlc
+    │   ├── LoginHistoryReport.rdlc
+    │   ├── ActiveUsersReport.rdlc
+    │   └── AuditActivityReport.rdlc
+    │
+    ├── Services
+    │   ├── ApiClient.cs
+    │   └── ReportService.cs
+    │
+    └── Session
+        └── TokenSessionManager.cs
+
+
+
+
+Clean Architecture rule:
+
+Domain ← Application ← Infrastructure ← API
+MVC calls API using HTTP only.

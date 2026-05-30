@@ -1,0 +1,91 @@
+﻿@model AuthPlatform.Mvc.Models.Auth.UserCreateViewModel
+
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <h5 class="mb-0">Edit User</h5>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Edit" method="post">
+
+                <input type="hidden" asp-for="AuthUserId" />
+
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">First Name</label>
+                        <input asp-for="FirstName" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Last Name</label>
+                        <input asp-for="LastName" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">User Name</label>
+                        <input asp-for="UserName" class="form-control" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input asp-for="Email" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+
+                    <div class="form-check">
+                        <input asp-for="IsActive"
+                               class="form-check-input" />
+
+                        <label asp-for="IsActive"
+                               class="form-check-label">
+                            Active User
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Groups</label>
+
+                    @foreach (var group in Model.Groups)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   name="AuthGroupIds"
+                                   value="@group.Value"
+                                   checked="@group.Selected" />
+
+                            <label class="form-check-label">
+                                @group.Text
+                            </label>
+                        </div>
+                    }
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    Update User
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary">
+                    Back
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+</div>

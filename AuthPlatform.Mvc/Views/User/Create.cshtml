@@ -1,0 +1,151 @@
+﻿@model AuthPlatform.Mvc.Models.Auth.UserCreateViewModel
+
+@{
+    ViewData["Title"] = "Create User";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <h5 class="mb-0">Create User</h5>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Create" method="post">
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">First Name</label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Last Name</label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label">User Name</label>
+                        <input asp-for="UserName" class="form-control" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">Password</label>
+
+                        <div class="input-group">
+                            <input asp-for="Password"
+                                   type="password"
+                                   id="Password"
+                                   class="form-control" />
+
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    onclick="togglePassword('Password')">
+                                Show
+                            </button>
+                        </div>
+
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Confirm Password</label>
+
+                        <div class="input-group">
+                            <input asp-for="ConfirmPassword"
+                                   type="password"
+                                   id="ConfirmPassword"
+                                   class="form-control" />
+
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    onclick="togglePassword('ConfirmPassword')">
+                                Show
+                            </button>
+                        </div>
+
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Status</label>
+
+                    <div class="form-check">
+                        <input asp-for="IsActive"
+                               class="form-check-input" />
+
+                        <label asp-for="IsActive"
+                               class="form-check-label">
+                            Active User
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Groups</label>
+
+                    @foreach (var group in Model.Groups)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   name="AuthGroupIds"
+                                   value="@group.Value" />
+
+                            <label class="form-check-label">
+                                @group.Text
+                            </label>
+                        </div>
+                    }
+
+                    <span asp-validation-for="AuthGroupIds"
+                          class="text-danger d-block"></span>
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    Save User
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary">
+                    Back
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+
+            if (input.type === "password") {
+                input.type = "text";
+            } else {
+                input.type = "password";
+            }
+        }
+    </script>
+}

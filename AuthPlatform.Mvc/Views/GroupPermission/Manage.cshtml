@@ -1,0 +1,75 @@
+﻿@model ManageGroupPermissionViewModel
+
+@{
+    ViewData["Title"] = "Group Permission Management";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">Group Permission Management</h5>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Manage" method="get" class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Group</label>
+                    <select name="authGroupId"
+                            asp-for="AuthGroupId"
+                            asp-items="Model.Groups"
+                            class="form-select"
+                            onchange="this.form.submit()">
+                        <option value="">-- Select Group --</option>
+                    </select>
+                </div>
+            </form>
+
+            @if (Model.AuthGroupId > 0)
+            {
+                <form method="post" asp-action="Save">
+                    <input type="hidden" asp-for="AuthGroupId" />
+
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:80px;">Select</th>
+                                <th>Permission Name</th>
+                                <th>Permission Code</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @for (int i = 0; i < Model.Permissions.Count; i++)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox"
+                                               asp-for="Permissions[i].IsSelected" />
+
+                                        <input type="hidden"
+                                               asp-for="Permissions[i].AuthPermissionId" />
+
+                                        <input type="hidden"
+                                               asp-for="Permissions[i].PermissionName" />
+
+                                        <input type="hidden"
+                                               asp-for="Permissions[i].PermissionCode" />
+                                    </td>
+
+                                    <td>@Model.Permissions[i].PermissionName</td>
+                                    <td>@Model.Permissions[i].PermissionCode</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <button type="submit" class="btn btn-success">
+                        Save Permissions
+                    </button>
+                </form>
+            }
+
+        </div>
+    </div>
+</div>

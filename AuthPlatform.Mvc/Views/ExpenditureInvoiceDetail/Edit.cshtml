@@ -1,0 +1,99 @@
+﻿@model ExpenditureInvoiceDetailViewModel
+
+@{
+    ViewData["Title"] = "Edit Invoice Detail";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">Edit Invoice Detail</h5>
+        </div>
+
+        <div class="card-body">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            <form asp-controller="ExpenditureInvoiceDetail" asp-action="Edit" method="post">
+                <input type="hidden" asp-for="ExpenditureInvoiceDetailId" />
+
+                <div class="row g-3">
+
+                    <div class="col-12 col-md-6">
+                        <label asp-for="ExpenditureInvoiceId" class="form-label">Invoice</label>
+                        <select asp-for="ExpenditureInvoiceId"
+                                asp-items="ViewBag.Invoices"
+                                class="form-select">
+                            <option value="">-- Select Invoice --</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label asp-for="ItemName" class="form-label">Item Name</label>
+                        <input asp-for="ItemName" class="form-control" />
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Description" class="form-label">Description</label>
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="3"></textarea>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label asp-for="Quantity" class="form-label">Quantity</label>
+                        <input asp-for="Quantity" class="form-control" />
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label asp-for="UnitPrice" class="form-label">Unit Price</label>
+                        <input asp-for="UnitPrice" class="form-control" />
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Line Total</label>
+                        <input id="LineTotal"
+                               class="form-control"
+                               readonly />
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input asp-for="IsActive" class="form-check-input" />
+                            <label asp-for="IsActive" class="form-check-label">Active</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex flex-column flex-sm-row gap-2">
+                    <button type="submit" class="btn btn-success">Update</button>
+
+                    <a class="btn btn-secondary"
+                       asp-controller="ExpenditureInvoiceDetail"
+                       asp-action="Index"
+                       asp-route-invoiceId="@Model.ExpenditureInvoiceId">
+                        Back
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function calculateLineTotal() {
+            const quantity = parseFloat($('#Quantity').val()) || 0;
+            const unitPrice = parseFloat($('#UnitPrice').val()) || 0;
+            const total = quantity * unitPrice;
+
+            $('#LineTotal').val(total.toFixed(2));
+        }
+
+        $('#Quantity, #UnitPrice').on('input', calculateLineTotal);
+
+        calculateLineTotal();
+    </script>
+}

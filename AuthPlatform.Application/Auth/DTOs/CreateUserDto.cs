@@ -1,0 +1,21 @@
+﻿namespace AuthPlatform.Application.Auth.DTOs
+{
+    public class CreateUserDto
+    {
+        public int AuthUserId { get; set; }
+
+        public string FirstName { get; set; } = string.Empty;
+
+        public string LastName { get; set; } = string.Empty;
+
+        public string UserName { get; set; } = string.Empty;
+
+        public string Email { get; set; } = string.Empty;
+
+        public string Password { get; set; } = string.Empty;
+
+        public bool IsActive { get; set; } = true;
+
+        public List<int> AuthGroupIds { get; set; } = new();
+    }
+}

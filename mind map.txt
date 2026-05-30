@@ -1,0 +1,81 @@
+BROWSER
+│
+│  User opens page
+│  Example: /GroupPermission/Manage
+│
+▼
+MVC CONTROLLER
+AuthPlatform.Mvc
+└── Controllers
+    └── Auth
+        └── GroupPermissionController.cs
+│
+│  Calls API using:
+│  _apiClient.GetAsync("groups")
+│
+▼
+MVC API CLIENT
+AuthPlatform.Mvc
+└── Services
+    └── ApiClientService.cs
+│
+│  Reads BaseUrl from:
+│
+AuthPlatform.Mvc
+└── appsettings.json
+│
+│  Example final URL:
+│  https://localhost:7166/api/groups
+│
+▼
+API CONTROLLER
+AuthPlatform.Api
+└── Auth
+    └── GroupController.cs
+│
+│  Uses interface:
+│  IGroupService
+│
+▼
+APPLICATION SERVICE INTERFACE
+AuthPlatform.Application
+└── Auth
+    └── Interfaces
+        └── IGroupService.cs
+│
+▼
+APPLICATION SERVICE
+AuthPlatform.Application
+└── Auth
+    └── Services
+        └── GroupService.cs
+│
+│  Uses repository interface:
+│  IAuthGroupRepository
+│
+▼
+DOMAIN REPOSITORY INTERFACE
+AuthPlatform.Domain
+└── Auth
+    └── Interfaces
+        └── IAuthGroupRepository.cs
+│
+▼
+INFRASTRUCTURE REPOSITORY
+AuthPlatform.Infrastructure
+└── Auth
+    └── EF
+        └── AuthGroupRepository.cs
+│
+│  Uses DbContext:
+│
+▼
+DB CONTEXT
+AuthPlatform.Infrastructure
+└── Persistence
+    └── ApplicationDbContext.cs
+│
+▼
+DATABASE
+SQL Server
+└── AuthGroups

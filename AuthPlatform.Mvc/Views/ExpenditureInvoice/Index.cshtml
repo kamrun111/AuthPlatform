@@ -1,0 +1,132 @@
+﻿@model List<ExpenditureInvoiceViewModel>
+
+@{
+    ViewData["Title"] = "Expenditure Invoices";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Expenditure Invoices</h5>
+
+            <a class="btn btn-primary btn-sm"
+               asp-controller="ExpenditureInvoice"
+               asp-action="Create">
+                Create New
+            </a>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="invoiceTable" class="table table-bordered table-striped align-middle w-100">
+                    <thead class="table-light">
+                        <tr>
+                            <th>SL</th>
+                            <th>Invoice No</th>
+                            <th>Date</th>
+                            <th>Expenditure Head</th>
+                            <th class="text-end">Total Amount</th>
+                            <th>Status</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            var sl = 1;
+                        }
+
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@sl</td>
+                                <td>@item.InvoiceNumber</td>
+                                <td>@item.InvoiceDate.ToString("yyyy-MM-dd")</td>
+                                <td>@item.ExpenditureHeadName</td>
+                                <td class="text-end">@item.TotalAmount.ToString("N2")</td>
+                                <td>
+                                    @if (item.IsActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Inactive</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <button type="button"
+                                            class="btn btn-info btn-sm"
+                                            onclick="openReport(@item.ExpenditureInvoiceId)">
+                                        Print
+                                    </button>
+
+                                    <a class="btn btn-warning btn-sm"
+                                       asp-action="Edit"
+                                       asp-route-id="@item.ExpenditureInvoiceId">
+                                        Edit
+                                    </a>
+
+                                    <form asp-action="Delete"
+                                          asp-route-id="@item.ExpenditureInvoiceId"
+                                          method="post"
+                                          class="d-inline">
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm"
+                                                onclick="return confirm('Are you sure?')">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                            sl++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="reportModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Invoice Report</h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body p-0">
+                <iframe id="reportFrame"
+                        width="100%"
+                        height="700px"
+                        style="border:none;">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openReport(id) {
+            $('#reportFrame').attr('src', '/ExpenditureReport/Invoice/' + id);
+            $('#reportModal').modal('show');
+        }
+
+        $(document).ready(function () {
+            $('#invoiceTable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                ordering: true,
+                searching: true,
+                autoWidth: false
+            });
+        });
+    </script>
+}

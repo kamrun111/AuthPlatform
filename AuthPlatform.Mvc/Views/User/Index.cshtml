@@ -1,0 +1,122 @@
+﻿@model List<AuthPlatform.Mvc.Models.Auth.AuthUserViewModel>
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="container-fluid mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header d-flex justify-content-between align-items-center">
+
+            <h5 class="mb-0">
+                Users
+            </h5>
+
+            <a asp-action="Create"
+               class="btn btn-primary">
+                Create User
+            </a>
+
+        </div>
+
+        <div class="card-body">
+
+            @if (TempData["success"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["success"]
+                </div>
+            }
+
+            @if (TempData["error"] != null)
+            {
+                <div class="alert alert-danger">
+                    @TempData["error"]
+                </div>
+            }
+
+            <table class="table table-bordered table-striped">
+
+                <thead>
+
+                    <tr>
+                        <th>User Name</th>
+
+                        <th>First Name</th>
+
+                        <th>Last Name</th>
+
+                        <th>Email</th>
+
+                        <th>Status</th>
+
+                        <th width="120">
+                            Action
+                        </th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @user.UserName
+                            </td>
+
+                            <td>
+                                @user.FirstName
+                            </td>
+
+                            <td>
+                                @user.LastName
+                            </td>
+
+                            <td>
+                                @user.Email
+                            </td>
+
+                            <td>
+
+                                @if (user.IsActive)
+                                {
+                                    <span class="badge bg-success">
+                                        Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        Inactive
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                <a asp-action="Edit"
+                                   asp-route-authUserId="@user.AuthUserId"
+                                   class="btn btn-warning btn-sm">
+                                    Edit
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

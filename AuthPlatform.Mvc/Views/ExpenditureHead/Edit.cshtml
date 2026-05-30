@@ -1,0 +1,57 @@
+﻿@model ExpenditureHeadViewModel
+
+@{
+    ViewData["Title"] = "Edit Expenditure Head";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header">
+            <h5 class="mb-0">Edit Expenditure Head</h5>
+        </div>
+
+        <div class="card-body">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
+
+            <form asp-controller="ExpenditureHead" asp-action="Edit" method="post">
+                <input type="hidden" asp-for="ExpenditureHeadId" />
+
+                <div class="row g-3">
+
+                    <div class="col-12 col-md-6">
+                        <label asp-for="ExpenditureHeadName" class="form-label">Name</label>
+                        <input asp-for="ExpenditureHeadName" class="form-control" />
+                        <span asp-validation-for="ExpenditureHeadName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12 col-md-6 d-flex align-items-end">
+                        <div class="form-check">
+                            <input asp-for="IsActive" class="form-check-input" />
+                            <label asp-for="IsActive" class="form-check-label">Active</label>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Description" class="form-label">Description</label>
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="4"></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex flex-column flex-sm-row gap-2">
+                    <button type="submit" class="btn btn-success">Update</button>
+
+                    <a class="btn btn-secondary"
+                       asp-controller="ExpenditureHead"
+                       asp-action="Index">
+                        Back
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

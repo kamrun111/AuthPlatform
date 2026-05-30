@@ -1,0 +1,259 @@
+﻿@inject AuthPlatform.Mvc.Session.TokenSessionManager TokenSession
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - AuthPlatform</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- DataTables -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css" />
+
+    <!-- Site -->
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+</head>
+
+<body class="bg-light">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+
+        <div class="container-fluid">
+
+            <!-- LOGO -->
+            <a class="navbar-brand fw-bold"
+               asp-controller="Home"
+               asp-action="Index">
+
+                AuthPlatform
+
+            </a>
+
+            <!-- MOBILE TOGGLE -->
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <div class="collapse navbar-collapse"
+                 id="navbarNav">
+
+                <!-- LEFT MENU -->
+                <ul class="navbar-nav me-auto">
+
+                    <!-- HOME -->
+                    <li class="nav-item">
+
+                        <a class="nav-link"
+                           asp-controller="Home"
+                           asp-action="Index">
+
+                            Home
+
+                        </a>
+
+                    </li>
+
+                    @if (TokenSession.IsAuthenticated())
+                    {
+                        <!-- EXPENDITURES -->
+                        <li class="nav-item dropdown">
+
+                            <a class="nav-link dropdown-toggle"
+                               href="#"
+                               role="button"
+                               data-bs-toggle="dropdown">
+
+                                Expenditures
+
+                            </a>
+
+                            <ul class="dropdown-menu shadow-sm">
+
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-controller="ExpenditureHead"
+                                       asp-action="Index">
+
+                                        Expenditure Heads
+
+                                    </a>
+
+                                </li>
+
+                                <li>
+
+                                    <a class="dropdown-item"
+                                       asp-controller="ExpenditureInvoice"
+                                       asp-action="Index">
+
+                                        Expenditure Invoices
+
+                                    </a>
+
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="ExpenditureReport"
+                                       asp-action="InvoiceFilter">
+                                        Expense Print
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                        </li>
+
+
+                        <!-- ADMIN PANEL -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle"
+                               href="#"
+                               role="button"
+                               data-bs-toggle="dropdown">
+                                Admin Panel
+                            </a>
+
+                            <ul class="dropdown-menu shadow-sm">
+
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="User"
+                                       asp-action="Index">
+                                        Users
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="GroupPermission"
+                                       asp-action="Manage">
+                                        Group Permissions
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-controller="UserPermission"
+                                       asp-action="Manage">
+                                        User Permissions
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    }
+
+                </ul>
+
+                <!-- RIGHT MENU -->
+                <ul class="navbar-nav ms-auto">
+
+                    @if (TokenSession.IsAuthenticated())
+                    {
+                        <!-- USER NAME -->
+                        <li class="nav-item d-flex align-items-center">
+
+                            <span class="navbar-text text-white me-3">
+
+                                Logged in as
+                                <strong>
+                                    @TokenSession.GetDisplayName()
+                                </strong>
+
+                            </span>
+
+                        </li>
+
+                        <!-- LOGOUT -->
+                        <li class="nav-item d-flex align-items-center">
+
+                            <form asp-controller="Auth"
+                                  asp-action="Logout"
+                                  method="post">
+
+                                <button type="submit"
+                                        class="btn btn-outline-light btn-sm">
+
+                                    Logout
+
+                                </button>
+
+                            </form>
+
+                        </li>
+                    }
+                    else
+                    {
+                        <!-- LOGIN -->
+                        <li class="nav-item">
+
+                            <a class="nav-link"
+                               asp-controller="Auth"
+                               asp-action="Login">
+
+                                Login
+
+                            </a>
+
+                        </li>
+                    }
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!-- PAGE CONTENT -->
+    <main class="container-fluid py-4">
+        <partial name="_Notification" />
+        @RenderBody()
+
+    </main>
+
+    <!-- jQuery -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

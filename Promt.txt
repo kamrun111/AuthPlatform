@@ -1,0 +1,249 @@
+I am building an enterprise‑grade authentication and authorization system using Clean Architecture with the following solution structure:
+
+AuthPlatform.sln
+│
+├── AuthPlatform.Domain
+├── AuthPlatform.Application
+├── AuthPlatform.Infrastructure
+├── AuthPlatform.Api
+└── AuthPlatform.Mvc
+
+WORKFLOW:
+1. First give me ONLY a high‑level PLAN (no code).
+2. After I say “Start step-by-step”, guide me through the full implementation:
+   - Create solution & projects
+   - Create folder structure
+   - Create entities, DbContext, migrations
+   - Create repositories, services, JWT, middleware
+   - Create API controllers
+   - Create MVC controllers & views
+   - Add permissions, session-based JWT, and RDLC reporting
+3. Each step must be clear and easy to follow.
+4. Do NOT generate code until I say: “Start step-by-step”.
+
+CLEAN ARCHITECTURE REQUIREMENTS:
+- Clean Architecture is the top priority.
+- No classic UnitOfWork pattern.
+- EF Core for write operations.
+- Dapper for read and write operations.
+- Domain = entities + interfaces + rules.
+- Application = services (use cases), DTOs, validators.
+- Infrastructure = EF Core, Dapper, repositories, hashing, JWT.
+- API = controllers + middleware.
+- MVC = client app calling API only (never touches database).
+
+AUTH & PERMISSION REQUIREMENTS:
+- Custom authentication module using the following entities:
+    - AuthUser
+    - AuthRole
+    - AuthPermission
+    - AuthUserPermission
+    - AuthRolePermission
+    - AuthLoginHistory
+    - AuthAuditActivity
+- Permissions must support:
+    - Role-based (group)
+    - User-based (individual)
+- JWT Authentication + Refresh Tokens
+- Secure password hashing (PBKDF2 or BCrypt)
+- Claims-based + permission-based authorization
+- API must remain stateless
+
+TOKEN STORAGE:
+- MVC must NOT store JWT in browser storage.
+- MVC stores Access + Refresh tokens in server-side session.
+- Browser only holds a Secure, HttpOnly session cookie.
+- MVC attaches Access Token as Bearer token when calling API.
+
+RDLC REPORTING REQUIREMENTS:
+- RDLC will be used as the reporting tool (free, no license).
+- Two types of reports:
+    1. Reports WITHOUT parameters (e.g., Active Users, Dashboard Summary)
+    2. Reports WITH parameters (e.g., User Permission, Role Permission, Login History, Audit Activity)
+- RDLC reports must be generated server-side in MVC.
+- Data for reports must come from Dapper.
+- Export formats: PDF, Excel.
+
+FULL PROJECT‑BASED FOLDER STRUCTURE:
+
+AuthPlatform.Domain
+│
+├── Auth
+│   ├── Entities
+│   │   ├── AuthUser.cs
+│   │   ├── AuthRole.cs
+│   │   ├── AuthPermission.cs
+│   │   ├── AuthUserPermission.cs
+│   │   ├── AuthRolePermission.cs
+│   │   ├── AuthLoginHistory.cs
+│   │   └── AuthAuditActivity.cs
+│   │
+│   └── Interfaces
+│       ├── IAuthUserRepository.cs
+│       ├── IAuthRoleRepository.cs
+│       ├── IAuthPermissionRepository.cs
+│       ├── IAuthUserPermissionRepository.cs
+│       └── IAuthRolePermissionRepository.cs
+│
+├── Expenditures
+│   ├── Entities
+│   │   ├── ExpenditureHead.cs
+│   │   ├── ExpenditureInvoice.cs
+│   │   └── ExpenditureInvoiceDetail.cs
+│   │
+│   └── Interfaces
+│       ├── IExpenditureHeadRepository.cs
+│       ├── IExpenditureInvoiceRepository.cs
+│       └── IExpenditureInvoiceDetailRepository.cs
+│
+└── Common
+    ├── BaseEntity.cs
+    └── AuditableEntity.cs
+
+
+AuthPlatform.Application
+│
+├── Auth
+│   ├── DTOs
+│   ├── Services
+│   ├── Validators
+│   └── Mappings
+│
+├── Expenditures
+│   ├── DTOs
+│   │   ├── ExpenditureHeadDto.cs
+│   │   ├── ExpenditureInvoiceDto.cs
+│   │   └── ExpenditureInvoiceDetailDto.cs
+│   │
+│   ├── Services
+│   │   ├── ExpenditureHeadService.cs
+│   │   ├── ExpenditureInvoiceService.cs
+│   │   └── ExpenditureInvoiceDetailService.cs
+│   │
+│   ├── Validators
+│   │   ├── ExpenditureHeadValidator.cs
+│   │   ├── ExpenditureInvoiceValidator.cs
+│   │   └── ExpenditureInvoiceDetailValidator.cs
+│   │
+│   └── Mappings
+│       ├── ExpenditureHeadMapping.cs
+│       ├── ExpenditureInvoiceMapping.cs
+│       └── ExpenditureInvoiceDetailMapping.cs
+│
+└── Common
+    └── Helpers
+
+
+AuthPlatform.Infrastructure
+│
+├── Auth
+│   ├── EF
+│   │   ├── AuthUserRepository.cs
+│   │   ├── AuthRoleRepository.cs
+│   │   └── AuthPermissionRepository.cs
+│   │
+│   └── Dapper
+│       ├── AuthUserQueryRepository.cs
+│       ├── AuthRoleQueryRepository.cs
+│       └── AuthPermissionQueryRepository.cs
+│
+├── Expenditures
+│   ├── EF
+│   │   ├── ExpenditureHeadRepository.cs
+│   │   ├── ExpenditureInvoiceRepository.cs
+│   │   └── ExpenditureInvoiceDetailRepository.cs
+│   │
+│   └── Dapper
+│       ├── ExpenditureHeadQueryRepository.cs
+│       ├── ExpenditureInvoiceQueryRepository.cs
+│       └── ExpenditureInvoiceDetailQueryRepository.cs
+│
+├── Persistence
+│   ├── ApplicationDbContext.cs
+│   ├── Configurations
+│   └── Migrations
+│
+└── Security
+    ├── PasswordHasher.cs
+    └── TokenGenerator.cs
+
+
+AuthPlatform.Api
+│
+├── Auth
+│   └── AuthController.cs
+│
+├── Expenditures
+│   ├── ExpenditureHeadController.cs
+│   ├── ExpenditureInvoiceController.cs
+│   └── ExpenditureInvoiceDetailController.cs
+│
+├── Reports
+│   └── ReportController.cs
+│
+└── Middleware
+    ├── JwtMiddleware.cs
+    └── PermissionMiddleware.cs
+
+
+AuthPlatform.Mvc
+│
+├── Auth
+│   ├── Controllers
+│   ├── Models
+│   ├── Views
+│   └── Reports
+│
+├── Expenditures
+│   ├── Controllers
+│   │   ├── ExpenditureHeadController.cs
+│   │   ├── ExpenditureInvoiceController.cs
+│   │   └── ExpenditureInvoiceDetailController.cs
+│   │
+│   ├── Models
+│   │   ├── ExpenditureHeadViewModel.cs
+│   │   ├── ExpenditureInvoiceViewModel.cs
+│   │   └── ExpenditureInvoiceDetailViewModel.cs
+│   │
+│   ├── Views
+│   │   ├── ExpenditureHead
+│   │   ├── ExpenditureInvoice
+│   │   └── ExpenditureInvoiceDetail
+│   │
+│   └── Reports
+│       ├── ExpenditureHeadReport.rdlc
+│       ├── ExpenditureInvoiceReport.rdlc
+│       └── ExpenditureInvoiceDetailReport.rdlc
+│
+├── Reports
+│   ├── UserPermissionReport.rdlc
+│   ├── RolePermissionReport.rdlc
+│   ├── LoginHistoryReport.rdlc
+│   ├── ActiveUsersReport.rdlc
+│   └── AuditActivityReport.rdlc
+│
+├── Services
+│   ├── ApiClient.cs
+│   └── ReportService.cs
+│
+└── Session
+    └── TokenSessionManager.cs
+
+
+FIRST RESPONSE MUST INCLUDE (PLAN ONLY):
+1. High-level architecture overview
+2. Responsibilities of each project
+3. Folder structure for each project
+4. Entity & database design
+5. Repository strategy (EF + Dapper)
+6. Application service design
+7. JWT + Refresh Token flow
+8. Permission-based authorization design
+9. Middleware design
+10. API design
+11. MVC design
+12. RDLC reporting design (with and without parameters)
+13. Security considerations
+14. Reusability strategy
+
+Do NOT generate code until I say: “Start step-by-step”.
