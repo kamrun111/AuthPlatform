@@ -291,3 +291,495 @@ This project is licensed under the [MIT License](LICENSE).
 *A reusable enterprise framework — built for scalability, maintainability, and security.*
 
 </div>
+
+
+
+# 📖 Developer Guide - Adding a New Module / Page
+
+This project follows **Clean Architecture** with separate layers:
+
+```text
+MVC
+ ↓
+API
+ ↓
+Application
+ ↓
+Domain
+ ↓
+Infrastructure
+ ↓
+Database
+```
+
+Every new feature must follow the same structure.
+
+---
+
+# Step 1: Create Database Table
+
+Create the required table in SQL Server.
+
+Example:
+
+```sql
+CREATE TABLE Buildings
+(
+    BuildingId INT IDENTITY PRIMARY KEY,
+    BuildingName NVARCHAR(200) NOT NULL,
+    Address NVARCHAR(500),
+    IsActive BIT NOT NULL DEFAULT 1
+);
+```
+
+---
+
+# Step 2: Create Domain Entity
+
+Location:
+
+```text
+AuthPlatform.Domain/<Module>/Entities
+```
+
+Example:
+
+```text
+AuthPlatform.Domain/Rentals/Entities/Building.cs
+```
+
+Example:
+
+```csharp
+public class Building
+{
+    public int BuildingId { get; set; }
+
+    public string BuildingName { get; set; } = string.Empty;
+
+    public string? Address { get; set; }
+
+    public bool IsActive { get; set; }
+}
+```
+
+---
+
+# Step 3: Add DbSet
+
+Location:
+
+```text
+AuthPlatform.Infrastructure/Persistence/ApplicationDbContext.cs
+```
+
+Add:
+
+```csharp
+public DbSet<Building> Buildings { get; set; }
+```
+
+---
+
+# Step 4: Create Repository Interface
+
+Location:
+
+```text
+AuthPlatform.Domain/<Module>/Interfaces
+```
+
+Example:
+
+```text
+IBuildingRepository.cs
+```
+
+Methods:
+
+```csharp
+Task<List<Building>> GetAllAsync();
+
+Task<Building?> GetByIdAsync(int id);
+
+Task AddAsync(Building entity);
+
+Task UpdateAsync(Building entity);
+
+Task DeleteAsync(Building entity);
+```
+
+---
+
+# Step 5: Create Repository Implementation
+
+Location:
+
+```text
+AuthPlatform.Infrastructure/<Module>/EF
+```
+
+Example:
+
+```text
+BuildingRepository.cs
+```
+
+Responsibilities:
+
+* Database access
+* EF Core queries
+* CRUD operations
+
+---
+
+# Step 6: Create DTO
+
+Location:
+
+```text
+AuthPlatform.Application/<Module>/DTOs
+```
+
+Example:
+
+```text
+BuildingDto.cs
+```
+
+Purpose:
+
+* API communication
+* Data transfer between layers
+
+---
+
+# Step 7: Create Service Interface
+
+Location:
+
+```text
+AuthPlatform.Application/<Module>/Interfaces
+```
+
+Example:
+
+```text
+IBuildingService.cs
+```
+
+---
+
+# Step 8: Create Service Implementation
+
+Location:
+
+```text
+AuthPlatform.Application/<Module>/Services
+```
+
+Example:
+
+```text
+BuildingService.cs
+```
+
+Responsibilities:
+
+* Business logic
+* Validation
+* Repository calls
+
+---
+
+# Step 9: Create AutoMapper Mapping
+
+Location:
+
+```text
+AuthPlatform.Application/<Module>/Mappings
+```
+
+Example:
+
+```csharp
+CreateMap<Building, BuildingDto>().ReverseMap();
+```
+
+---
+
+# Step 10: Register Dependency Injection
+
+Location:
+
+```text
+AuthPlatform.Api/Program.cs
+```
+
+Example:
+
+```csharp
+builder.Services.AddScoped<IBuildingRepository, BuildingRepository>();
+
+builder.Services.AddScoped<IBuildingService, BuildingService>();
+```
+
+---
+
+# Step 11: Create API Controller
+
+Location:
+
+```text
+AuthPlatform.Api/<Module>
+```
+
+Example:
+
+```text
+BuildingController.cs
+```
+
+Controller format:
+
+```csharp
+[ApiController]
+[Route("api/buildings")]
+[Authorize]
+public class BuildingController : ControllerBase
+{
+}
+```
+
+API controllers should use:
+
+```csharp
+[Authorize]
+```
+
+Only.
+
+---
+
+# Step 12: Create MVC ViewModel
+
+Location:
+
+```text
+AuthPlatform.Mvc/Models/<Module>
+```
+
+Example:
+
+```text
+BuildingViewModel.cs
+```
+
+---
+
+# Step 13: Create MVC Controller
+
+Location:
+
+```text
+AuthPlatform.Mvc/Controllers/<Module>
+```
+
+Example:
+
+```text
+BuildingController.cs
+```
+
+Responsibilities:
+
+* Call API using ApiClientService
+* Return Razor Views
+* Handle UI actions
+
+Apply:
+
+```csharp
+[PermissionAuthorize]
+```
+
+to protected pages.
+
+---
+
+# Step 14: Create Razor Views
+
+Location:
+
+```text
+AuthPlatform.Mvc/Views/Building
+```
+
+Create:
+
+```text
+Index.cshtml
+Create.cshtml
+Edit.cshtml
+```
+
+Optional:
+
+```text
+Details.cshtml
+Delete.cshtml
+```
+
+---
+
+# Step 15: Add Menu Item
+
+Location:
+
+```text
+Views/Shared/_Layout.cshtml
+```
+
+Example:
+
+```html
+<a asp-controller="Building"
+   asp-action="Index"
+   class="dropdown-item">
+    Buildings
+</a>
+```
+
+---
+
+# Step 16: Add Permissions
+
+Add permissions into:
+
+```text
+AuthPermissions
+```
+
+Format:
+
+```text
+Controller.Action
+```
+
+Example:
+
+```text
+Building.Index
+Building.Create
+Building.Edit
+Building.Delete
+```
+
+Assign permissions using:
+
+```text
+Group Permission Management
+```
+
+or
+
+```text
+User Permission Management
+```
+
+After assigning permissions:
+
+```text
+Logout
+Login again
+```
+
+because permissions are loaded during login.
+
+---
+
+# Step 17: Create Migration
+
+```bash
+dotnet ef migrations add AddBuildingModule
+```
+
+Update database:
+
+```bash
+dotnet ef database update
+```
+
+---
+
+# Step 18: Test
+
+Verify:
+
+```text
+✓ List Page
+✓ Create
+✓ Edit
+✓ Delete
+✓ Permission Access
+✓ API Response
+✓ Database Records
+```
+
+---
+
+# Permission Architecture
+
+This project uses:
+
+```text
+MVC  → Authorization
+API  → Authentication
+```
+
+MVC checks:
+
+```text
+Building.Index
+Building.Create
+Building.Edit
+Building.Delete
+```
+
+API checks:
+
+```csharp
+[Authorize]
+```
+
+only.
+
+This keeps permission management centralized and easy to maintain.
+
+---
+
+# New Module Checklist
+
+```text
+□ Database Table Created
+□ Domain Entity Created
+□ DbSet Added
+□ Repository Interface Created
+□ Repository Implementation Created
+□ DTO Created
+□ Service Interface Created
+□ Service Created
+□ AutoMapper Mapping Added
+□ Dependency Injection Registered
+□ API Controller Created
+□ MVC ViewModel Created
+□ MVC Controller Created
+□ Razor Views Created
+□ Menu Added
+□ Permissions Added
+□ Permissions Assigned
+□ Migration Created
+□ Database Updated
+□ Feature Tested
+```
+
