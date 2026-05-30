@@ -26,38 +26,34 @@
 
     </div>
 
-    <div class="row justify-content-center mt-4">
+    <div class="row justify-content-end mt-5">
 
-        <div class="col-12 col-lg-8">
+        <div class="col-auto">
 
-            <div class="card border-warning shadow-sm">
+            <div class="card border-warning shadow-sm" style="width: 320px;">
 
-                <div class="card-header bg-warning text-dark text-center">
-                    <h5 class="mb-0">
-                        Test Login Credentials
-                    </h5>
+                <div class="card-header bg-warning text-dark py-2 text-center">
+                    <h6 class="mb-0">
+                        Test Credentials
+                    </h6>
                 </div>
 
-                <div class="card-body">
-
-                    <p class="text-muted text-center">
-                        Use these accounts to test role-based and permission-based access.
-                    </p>
+                <div class="card-body p-2">
 
                     <div class="table-responsive">
 
-                        <table class="table table-bordered table-striped align-middle text-center mb-0">
+                        <table class="table table-bordered table-sm align-middle text-center mb-0">
 
                             <thead class="table-light">
                                 <tr>
-                                    <th>User Type</th>
+                                    <th>User</th>
                                     <th>Username</th>
                                     <th>Password</th>
-                                    <th>Access</th>
                                 </tr>
                             </thead>
 
                             <tbody>
+
                                 <tr>
                                     <td>
                                         <strong>Admin</strong>
@@ -71,41 +67,36 @@
                                         <code>Admin@123</code>
                                     </td>
 
-                                    <td>
-                                        Full access
-                                    </td>
                                 </tr>
 
                                 <tr>
                                     <td>
-                                        <strong>Viewer</strong>
+                                        <strong>TestUser</strong>
                                     </td>
 
                                     <td>
-                                        <code>viewer</code>
+                                        <code>TestUser</code>
                                     </td>
 
                                     <td>
                                         <code>Admin@123</code>
                                     </td>
 
-                                    <td>
-                                        View only
-                                    </td>
                                 </tr>
+
                             </tbody>
 
                         </table>
 
                     </div>
 
-                    <div class="text-center mt-3">
+                    <div class="text-center mt-2">
 
                         <a asp-controller="Auth"
                            asp-action="Login"
-                           class="btn btn-dark px-4">
+                           class="btn btn-dark btn-sm">
 
-                            Go to Login
+                            Login
 
                         </a>
 

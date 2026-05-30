@@ -25,9 +25,9 @@ public class TokenSessionManager
         Session.SetString("Permissions", JsonSerializer.Serialize(permissions));
     }
 
-    public void SetRolePermissions(List<string> permissions)
+    public void SetGroupPermissions(List<string> permissions)
     {
-        Session.SetString("RolePermissions", JsonSerializer.Serialize(permissions));
+        Session.SetString("GroupPermissions", JsonSerializer.Serialize(permissions));
     }
 
     public void SetUserPermissions(List<string> permissions)
@@ -79,9 +79,9 @@ public class TokenSessionManager
         return GetUserName() ?? "User";
     }
 
-    public List<string> GetRolePermissions()
+    public List<string> GetGroupPermissions()
     {
-        var json = Session.GetString("RolePermissions");
+        var json = Session.GetString("GroupPermissions");
 
         if (string.IsNullOrWhiteSpace(json))
         {
@@ -103,9 +103,9 @@ public class TokenSessionManager
         return JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
     }
 
-    public bool HasRolePermission(string permissionCode)
+    public bool HasGroupPermission(string permissionCode)
     {
-        return GetRolePermissions().Contains(permissionCode);
+        return GetGroupPermissions().Contains(permissionCode);
     }
 
     public bool HasUserPermission(string permissionCode)

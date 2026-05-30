@@ -1,4 +1,4 @@
-﻿using AuthPlatform.Mvc.Session;
+﻿ using AuthPlatform.Mvc.Session;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -22,10 +22,10 @@ namespace AuthPlatform.Mvc.Authorization.Attributes
             var actionName = context.RouteData.Values["action"]?.ToString();
             var permissionCode = $"{controllerName}.{actionName}";
 
-            var hasRolePermission = tokenSessionManager.HasRolePermission(permissionCode);
+            var hasGroupPermission = tokenSessionManager.HasGroupPermission(permissionCode);
             var hasUserPermission = tokenSessionManager.HasUserPermission(permissionCode);
 
-            if (!hasRolePermission && !hasUserPermission)
+            if (!hasGroupPermission && !hasUserPermission)
             {
                 context.Result = new RedirectToActionResult("AccessDenied", "Auth", null);
             }

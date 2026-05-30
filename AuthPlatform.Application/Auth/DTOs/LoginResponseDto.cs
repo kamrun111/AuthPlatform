@@ -24,6 +24,6 @@ namespace AuthPlatform.Application.Auth.DTOs
         public DateTime AccessTokenExpiration { get; set; }
 
         public List<string> Permissions { get; set; } = new();
-        public List<string> RolePermissions { get; set; } = new();
+        public List<string> GroupPermissions  { get; set; } = new();
     }
 }

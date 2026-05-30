@@ -22,11 +22,19 @@ namespace AuthPlatform.Mvc.Services
 
             if (result?.Success == true && result.Data != null)
             {
-                _tokenSessionManager.SetLoginSession(result.Data.AccessToken, result.Data.RefreshToken, result.Data.AuthUserId, result.Data.FirstName, result.Data.LastName, result.Data.UserName, result.Data.Permissions);
+                _tokenSessionManager.SetLoginSession(
+                    result.Data.AccessToken, 
+                    result.Data.RefreshToken,
+                    result.Data.AuthUserId, 
+                    result.Data.FirstName, 
+                    result.Data.LastName,
+                    result.Data.UserName, 
+                    result.Data.Permissions);
+               
 
                 _tokenSessionManager.SetUserPermissions(result.Data.Permissions);
 
-                _tokenSessionManager.SetRolePermissions(result.Data.RolePermissions ?? new List<string>());
+                _tokenSessionManager.SetGroupPermissions(result.Data.GroupPermissions ?? new List<string>());
             }
 
             return result;

@@ -33,8 +33,7 @@ namespace AuthPlatform.Mvc.Controllers.Auth
 
             if (response?.Success != true)
             {
-                ViewBag.Error =
-                    response?.Message ?? "Invalid username or password.";
+                ViewBag.Error =response?.Message ?? "Invalid username or password.";
 
                 return View(model);
             }

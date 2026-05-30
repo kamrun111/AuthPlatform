@@ -29,9 +29,7 @@ namespace AuthPlatform.Mvc.Controllers.Expenditures
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var response = await _apiClient
-                .GetAsync<ApiResponse<List<ExpenditureHeadViewModel>>>(
-                    "expenditure-heads");
+            var response = await _apiClient.GetAsync<ApiResponse<List<ExpenditureHeadViewModel>>>("expenditure-heads");
 
             var data = response?.Data;
 
@@ -57,10 +55,7 @@ namespace AuthPlatform.Mvc.Controllers.Expenditures
                 return View(model);
             }
             model.RecordCreatedBy = _tokenSessionManager.GetAuthUserId();
-            var response = await _apiClient
-                .PostAsync<ApiResponse<string>>(
-                    "expenditure-heads",
-                    model);
+            var response = await _apiClient.PostAsync<ApiResponse<string>>("expenditure-heads",model);
 
             if (response == null || !response.Success)
             {

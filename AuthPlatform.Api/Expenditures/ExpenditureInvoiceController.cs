@@ -1,5 +1,4 @@
-﻿using AuthPlatform.Api.Attributes;
-using AuthPlatform.Application.Expenditures.DTOs;
+﻿using AuthPlatform.Application.Expenditures.DTOs;
 using AuthPlatform.Application.Expenditures.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +9,12 @@ namespace AuthPlatform.Api.Expenditures
 
     [ApiController]
     [Route("api/expenditure-invoices")]
+    [Authorize]
     public class ExpenditureInvoiceController : ControllerBase
     {
         private readonly IExpenditureInvoiceService _service;
 
-        public ExpenditureInvoiceController(
-            IExpenditureInvoiceService service)
+        public ExpenditureInvoiceController(IExpenditureInvoiceService service)
         {
             _service = service;
         }
@@ -56,9 +55,7 @@ namespace AuthPlatform.Api.Expenditures
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(
-            int id,
-            ExpenditureInvoiceDto request)
+        public async Task<IActionResult> Update(int id,ExpenditureInvoiceDto request)
         {
             if (id != request.ExpenditureInvoiceId)
             {

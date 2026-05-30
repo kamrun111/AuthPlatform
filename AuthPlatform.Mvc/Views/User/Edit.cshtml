@@ -23,11 +23,13 @@
                     <div class="col-md-6">
                         <label class="form-label">First Name</label>
                         <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Last Name</label>
                         <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -35,12 +37,58 @@
                     <div class="col-md-6">
                         <label class="form-label">User Name</label>
                         <input asp-for="UserName" class="form-control" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
                     </div>
 
                     <div class="col-md-6">
                         <label class="form-label">Email</label>
                         <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
+                </div>
+
+                <div class="row mb-3">
+
+                    <div class="col-md-6">
+                        <label class="form-label">New Password</label>
+
+                        <div class="input-group">
+                            <input asp-for="Password"
+                                   type="password"
+                                   id="Password"
+                                   class="form-control"
+                                   placeholder="Leave blank to keep current password" />
+
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    onclick="togglePassword('Password')">
+                                Show
+                            </button>
+                        </div>
+
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label">Confirm New Password</label>
+
+                        <div class="input-group">
+                            <input asp-for="ConfirmPassword"
+                                   type="password"
+                                   id="ConfirmPassword"
+                                   class="form-control"
+                                   placeholder="Leave blank to keep current password" />
+
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    onclick="togglePassword('ConfirmPassword')">
+                                Show
+                            </button>
+                        </div>
+
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
                 </div>
 
                 <div class="mb-3">
@@ -74,6 +122,9 @@
                             </label>
                         </div>
                     }
+
+                    <span asp-validation-for="AuthGroupIds"
+                          class="text-danger d-block"></span>
                 </div>
 
                 <button type="submit" class="btn btn-success">
@@ -89,3 +140,19 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+
+            if (input.type === "password") {
+                input.type = "text";
+            } else {
+                input.type = "password";
+            }
+        }
+    </script>
+}

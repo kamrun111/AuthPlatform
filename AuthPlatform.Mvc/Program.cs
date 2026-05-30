@@ -1,7 +1,7 @@
 using AuthPlatform.Mvc.Reports.Services;
 using AuthPlatform.Mvc.Services;
 using AuthPlatform.Mvc.Session;
-using AuthPlatform.Mvc.Reports.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +21,9 @@ builder.Services.AddSession(options =>
 
     options.Cookie.IsEssential = true;
 
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 
-    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.SameSite = SameSiteMode.Lax;
 });
 
 // Application Services

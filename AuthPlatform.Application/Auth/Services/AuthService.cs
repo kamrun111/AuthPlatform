@@ -4,38 +4,34 @@ using AuthPlatform.Application.Auth.Security;
 using AuthPlatform.Application.Common.Responses;
 using AuthPlatform.Domain.Auth.Interfaces;
 
-
-
 namespace AuthPlatform.Application.Auth.Services
 {
-
-
-   
-  
-
     public class AuthService : IAuthService
     {
         private readonly IAuthUserRepository _authUserRepository;
         private readonly IAuthUserPermissionRepository _userPermissionRepository;
+        private readonly IAuthUserGroupRepository _userGroupRepository;
+        private readonly IAuthGroupPermissionRepository _groupPermissionRepository;
         private readonly IPasswordHasher _passwordHasher;
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IRefreshTokenGenerator _refreshTokenGenerator;
-        private readonly IAuthGroupPermissionRepository _rolePermissionRepository;
 
         public AuthService(
             IAuthUserRepository authUserRepository,
             IAuthUserPermissionRepository userPermissionRepository,
+            IAuthUserGroupRepository userGroupRepository,
+            IAuthGroupPermissionRepository groupPermissionRepository,
             IPasswordHasher passwordHasher,
             ITokenGenerator tokenGenerator,
-            IRefreshTokenGenerator refreshTokenGenerator,
-            IAuthGroupPermissionRepository rolePermissionRepository)
+            IRefreshTokenGenerator refreshTokenGenerator)
         {
             _authUserRepository = authUserRepository;
             _userPermissionRepository = userPermissionRepository;
+            _userGroupRepository = userGroupRepository;
+            _groupPermissionRepository = groupPermissionRepository;
             _passwordHasher = passwordHasher;
             _tokenGenerator = tokenGenerator;
             _refreshTokenGenerator = refreshTokenGenerator;
-            _rolePermissionRepository = rolePermissionRepository;
         }
 
         public async Task<ApiResponse<LoginResponseDto>> LoginAsync(LoginRequestDto request)
@@ -76,15 +72,44 @@ namespace AuthPlatform.Application.Auth.Services
             var userPermissions = await _userPermissionRepository
                 .GetByUserIdAsync(user.AuthUserId);
 
-            var permissionCodes = userPermissions
+            var userPermissionCodes = userPermissions
                 .Select(x => x.AuthPermission.PermissionCode)
+                .Distinct()
+                .ToList();
+
+            var userGroups = await _userGroupRepository
+                .GetByUserIdAsync(user.AuthUserId);
+
+            var groupIds = userGroups
+                .Select(x => x.AuthGroupId)
+                .Distinct()
+                .ToList();
+
+            var groupPermissionCodes = new List<string>();
+
+            foreach (var groupId in groupIds)
+            {
+                var groupPermissions = await _groupPermissionRepository
+                    .GetByGroupIdAsync(groupId);
+
+                groupPermissionCodes.AddRange(
+                    groupPermissions
+                        .Select(x => x.AuthPermission.PermissionCode));
+            }
+
+            groupPermissionCodes = groupPermissionCodes
+                .Distinct()
+                .ToList();
+
+            var allPermissionCodes = userPermissionCodes
+                .Union(groupPermissionCodes)
                 .Distinct()
                 .ToList();
 
             var accessToken = _tokenGenerator.GenerateAccessToken(
                 user.AuthUserId,
                 user.UserName,
-                permissionCodes);
+                allPermissionCodes);
 
             var refreshToken = _refreshTokenGenerator.GenerateRefreshToken();
 
@@ -101,7 +126,8 @@ namespace AuthPlatform.Application.Auth.Services
                     AccessToken = accessToken,
                     RefreshToken = refreshToken,
                     AccessTokenExpiration = DateTime.UtcNow.AddMinutes(30),
-                    Permissions = permissionCodes
+                    Permissions = userPermissionCodes,
+                    GroupPermissions = groupPermissionCodes
                 }
             };
         }

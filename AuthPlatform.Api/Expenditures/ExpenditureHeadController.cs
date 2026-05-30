@@ -21,7 +21,7 @@ namespace AuthPlatform.Api.Expenditures
         }
 
         [HttpGet]
-        [HasPermission("ExpenditureHead.View")]
+        //[HasPermission("ExpenditureHead.Index")]
         public async Task<IActionResult> GetAll()
         {
             var result = await _service.GetAllAsync();
@@ -30,7 +30,7 @@ namespace AuthPlatform.Api.Expenditures
         }
 
         [HttpGet("{expenditureHeadId:int}")]
-        [HasPermission("ExpenditureHead.View")]
+        //[HasPermission("ExpenditureHead.Index")]
         public async Task<IActionResult> GetById(int expenditureHeadId)
         {
             var result = await _service.GetByIdAsync(expenditureHeadId);
@@ -44,7 +44,7 @@ namespace AuthPlatform.Api.Expenditures
         }
 
         [HttpPost]
-        [HasPermission("ExpenditureHead.Create")]
+        //[HasPermission("ExpenditureHead.Create")]
         public async Task<IActionResult> Create(ExpenditureHeadDto request)
         {
             var result = await _service.CreateAsync(request);
@@ -58,7 +58,7 @@ namespace AuthPlatform.Api.Expenditures
         }
 
         [HttpPut("{expenditureHeadId:int}")]
-        [HasPermission("ExpenditureHead.Edit")]
+        //[HasPermission("ExpenditureHead.Edit")]
         public async Task<IActionResult> Update(
             int expenditureHeadId,
             ExpenditureHeadDto request)
@@ -76,7 +76,7 @@ namespace AuthPlatform.Api.Expenditures
         }
 
         [HttpDelete("{expenditureHeadId:int}")]
-        [HasPermission("ExpenditureHead.Delete")]
+        //[HasPermission("ExpenditureHead.Delete")]
         public async Task<IActionResult> Delete(int expenditureHeadId)
         {
             var result = await _service.DeleteAsync(expenditureHeadId);
