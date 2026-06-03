@@ -168,5 +168,19 @@ AuthPlatform.sln
 
 Clean Architecture rule:
 
-Domain ← Application ← Infrastructure ← API
-MVC calls API using HTTP only.
+
+infrastructure dependents on domain/application
+
+but application should not depends on infrastructure
+
+Your structure:
+
+Domain → Entities + Interfaces
+
+Application → Services + DTOs + Business logic
+
+Infrastructure → EF Core implementation
+
+WebAPI → Controllers
+
+MVC → UI client

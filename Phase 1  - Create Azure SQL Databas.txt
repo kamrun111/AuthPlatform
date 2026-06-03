@@ -1,0 +1,32 @@
+Phase 1  - Create Azure SQL Database free offer
+Phase 2  - Move database schema/data to Azure SQL
+Phase 3  - Create Azure Container Apps environment
+Phase 4  - Deploy API container from GHCR
+Phase 5  - Add API environment variables
+Phase 6  - Test API Swagger online
+Phase 7  - Deploy MVC container from GHCR
+Phase 8  - Add MVC API URL environment variable
+Phase 9  - Test full live website
+Phase 10 - Add cost safety checks
+
+
+Your local SQL login was:
+
+Username: authapp
+Password: Auth@12345678
+
+
+Server name: authplatformsqlkamrun111
+Location: Germany West Central
+Authentication: SQL authentication
+sqlserver:authplatformsqlkamrun111.database.windows.net
+Admin login: sqladmin
+Password: Sql@12345678
+
+Server=tcp:authplatformsqlkamrun111.database.windows.net,1433;Initial Catalog=AuthPlatformDb;Persist Security Info=False;User ID=sqladmin;Password=Sql@12345678;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+
+API Swagger:
+https://authplatform-api.livelymeadow-5854e5ea.germanywestcentral.azurecontainerapps.io/swagger
+
+MVC Website:
+https://authplatform-mvc.livelymeadow-5854e5ea.germanywestcentral.azurecontainerapps.io/

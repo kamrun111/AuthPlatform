@@ -247,3 +247,4 @@ FIRST RESPONSE MUST INCLUDE (PLAN ONLY):
 14. Reusability strategy
 
 Do NOT generate code until I say: “Start step-by-step”.
+

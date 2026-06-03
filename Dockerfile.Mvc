@@ -18,6 +18,22 @@ RUN dotnet publish AuthPlatform.Mvc/AuthPlatform.Mvc.csproj -c Release -o /app/p
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS runtime
 
+RUN apt-get update && apt-get install -y \
+    libgdiplus \
+    libc6-dev \
+    libx11-dev \
+    fontconfig \
+    fonts-dejavu-core \
+    libfreetype6 \
+    libfontconfig1 \
+    libxrender1 \
+    libxext6 \
+    && GDIPLUS_PATH=$(find /usr/lib -name "libgdiplus.so*" | head -n 1) \
+    && ln -sf "$GDIPLUS_PATH" /usr/lib/gdiplus.dll \
+    && ln -sf "$GDIPLUS_PATH" /usr/lib/gdiplus.dll.so \
+    && ln -sf "$GDIPLUS_PATH" /usr/lib/libgdiplus.dll.so \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 COPY --from=build /app/publish .

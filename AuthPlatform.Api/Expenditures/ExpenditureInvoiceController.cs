@@ -41,8 +41,7 @@ namespace AuthPlatform.Api.Expenditures
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(
-            ExpenditureInvoiceDto request)
+        public async Task<IActionResult> Create(ExpenditureInvoiceDto request)
         {
             var result = await _service.CreateAsync(request);
 
