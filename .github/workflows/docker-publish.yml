@@ -1,0 +1,45 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY: ghcr.io
+  OWNER: kamrun111
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push API image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.Api
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.OWNER }}/authplatform-api:latest
+
+      - name: Build and push MVC image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.Mvc
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.OWNER }}/authplatform-mvc:latest
