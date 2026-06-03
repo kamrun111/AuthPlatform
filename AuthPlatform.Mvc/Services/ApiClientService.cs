@@ -16,17 +16,13 @@ namespace AuthPlatform.Mvc.Services
         private readonly IConfiguration _configuration;
         private readonly TokenSessionManager _tokenSessionManager;
 
-        public ApiClientService(
-            HttpClient httpClient,
-            IConfiguration configuration,
-            TokenSessionManager tokenSessionManager)
+        public ApiClientService( HttpClient httpClient,IConfiguration configuration,TokenSessionManager tokenSessionManager)
         {
             _httpClient = httpClient;
             _configuration = configuration;
             _tokenSessionManager = tokenSessionManager;
 
-            _httpClient.BaseAddress = new Uri(
-                _configuration["ApiSettings:BaseUrl"]!);
+            _httpClient.BaseAddress = new Uri(_configuration["ApiSettings:BaseUrl"]!);
         }
 
         public async Task<T?> GetAsync<T>(string endpoint)
