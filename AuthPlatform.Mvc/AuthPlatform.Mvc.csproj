@@ -19,14 +19,11 @@
     <Folder Include="Reports\Common\Footer\" />
     <Folder Include="Reports\Common\Styles\" />
     <Folder Include="Reports\Common\Logo\" />
+    <Folder Include="Views\NewFolder\" />
     <Folder Include="wwwroot\reports\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Reports\FastReport\**\*.frx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-    </None>
 
     <None Update="Reports\Common\**\*.*">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

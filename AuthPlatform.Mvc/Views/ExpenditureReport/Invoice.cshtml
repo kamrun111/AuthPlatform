@@ -1,0 +1,152 @@
+﻿@model List<AuthPlatform.Mvc.Reports.ReportDataSets.Expenditure.ExpenditureInvoiceReportDto>
+
+@{
+    Layout = null;
+    var first = Model.FirstOrDefault();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Expenditure Invoice Report</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            color: #222;
+        }
+
+        .report-container {
+            max-width: 950px;
+            margin: auto;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+        .info {
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f2f2f2;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .total {
+            text-align: right;
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .print-button {
+            margin-bottom: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+        }
+
+        @@media print {
+            .print-button {
+                display: none;
+            }
+
+            body {
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="report-container">
+
+        <button class="print-button" onclick="window.print()">Print / Save as PDF</button>
+
+        <div class="header">
+            <h2>Expenditure Invoice Report</h2>
+            <p>AuthPlatform</p>
+        </div>
+
+        @if (first != null)
+        {
+            <div class="info">
+                <strong>Invoice Number:</strong> @first.InvoiceNumber <br />
+                <strong>Invoice Date:</strong> @first.InvoiceDate.ToString("dd/MM/yyyy") <br />
+                <strong>Expenditure Head:</strong> @first.ExpenditureHeadName <br />
+                <strong>Printed By:</strong> @first.PrintedBy <br />
+                <strong>Print Date:</strong> @first.PrintDate.ToString("dd/MM/yyyy hh:mm tt")
+            </div>
+        }
+
+        <table>
+            <thead>
+                <tr>
+                    <th>SL</th>
+                    <th>Expense Date</th>
+                    <th>Item Name</th>
+                    <th>Description</th>
+                    <th class="text-right">Quantity</th>
+                    <th class="text-right">Unit Price</th>
+                    <th class="text-right">Line Total</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{
+                    var sl = 1;
+                }
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@sl</td>
+                        <td>@item.ExpenseDate</td>
+                        <td>@item.ItemName</td>
+                        <td>@item.Description</td>
+                        <td class="text-right">@item.Quantity</td>
+                        <td class="text-right">@item.UnitPrice.ToString("N2")</td>
+                        <td class="text-right">@item.LineTotal.ToString("N2")</td>
+                    </tr>
+
+                    sl++;
+                }
+            </tbody>
+        </table>
+
+        @if (first != null)
+        {
+            <div class="total">
+                Total Amount: @first.TotalAmount.ToString("N2")
+            </div>
+        }
+
+    </div>
+</body>
+</html>

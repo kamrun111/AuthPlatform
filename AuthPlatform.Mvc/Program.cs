@@ -1,4 +1,4 @@
-using AuthPlatform.Mvc.Reports.Services;
+
 using AuthPlatform.Mvc.Services;
 using AuthPlatform.Mvc.Session;
 
@@ -37,7 +37,7 @@ builder.Services.AddHttpClient<ApiClientService>();
 builder.Services.AddHttpClient<ApiClientSession>();
 
 // Report
-builder.Services.AddScoped<IFastReportService, FastReportService>();
+
 
 var app = builder.Build();
 

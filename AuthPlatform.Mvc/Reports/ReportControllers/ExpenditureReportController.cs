@@ -1,7 +1,6 @@
 ﻿using AuthPlatform.Mvc.Models;
 using AuthPlatform.Mvc.Models.Expenditures;
 using AuthPlatform.Mvc.Reports.ReportDataSets.Expenditure;
-using AuthPlatform.Mvc.Reports.Services;
 using AuthPlatform.Mvc.Services;
 using AuthPlatform.Mvc.Session;
 using Microsoft.AspNetCore.Mvc;
@@ -12,16 +11,13 @@ namespace AuthPlatform.Mvc.Reports.ReportControllers
     public class ExpenditureReportController : Controller
     {
         private readonly ApiClientService _apiClient;
-        private readonly IFastReportService _fastReportService;
         private readonly TokenSessionManager _tokenSessionManager;
 
         public ExpenditureReportController(
             ApiClientService apiClient,
-            IFastReportService fastReportService,
             TokenSessionManager tokenSessionManager)
         {
             _apiClient = apiClient;
-            _fastReportService = fastReportService;
             _tokenSessionManager = tokenSessionManager;
         }
 
@@ -55,24 +51,13 @@ namespace AuthPlatform.Mvc.Reports.ReportControllers
                 PrintDate = DateTime.Now,
                 PrintedBy = printedBy
             }).ToList();
+
             if (!reportData.Any())
             {
-                return BadRequest("No records found for selected filter.");
+                return BadRequest("No records found for this invoice.");
             }
 
-            string reportPath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "Reports",
-                "FastReport",
-                "Expenditure",
-                "ExpenditureInvoiceReport.frx");
-
-            byte[] pdf = _fastReportService.GeneratePdf(
-                reportPath,
-                "InvoiceData",
-                reportData);
-
-            return File(pdf, "application/pdf");
+            return View("~/Views/ExpenditureReport/Invoice.cshtml", reportData);
         }
 
         [HttpGet]
@@ -90,13 +75,16 @@ namespace AuthPlatform.Mvc.Reports.ReportControllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> InvoiceFilterPrint(DateTime startDate,DateTime endDate,int? expenditureHeadId)
+        public async Task<IActionResult> InvoiceFilterPrint(
+            DateTime startDate,
+            DateTime endDate,
+            int? expenditureHeadId)
         {
-
             if (startDate.Date > endDate.Date)
             {
                 return BadRequest("Start Date cannot be greater than End Date.");
             }
+
             var response =
                 await _apiClient.GetAsync<ApiResponse<List<ExpenditureInvoiceViewModel>>>(
                     "expenditure-invoices");
@@ -163,19 +151,7 @@ namespace AuthPlatform.Mvc.Reports.ReportControllers
                 item.GrandTotalAmount = grandTotal;
             }
 
-            string reportPath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "Reports",
-                "FastReport",
-                "Expenditure",
-                "ExpenditureInvoiceFilterReport.frx");
-
-            byte[] pdf = _fastReportService.GeneratePdf(
-                reportPath,
-                "InvoiceFilterData",
-                reportData);
-
-            return File(pdf, "application/pdf");
+            return View("~/Views/ExpenditureReport/InvoiceFilterPrint.cshtml", reportData);
         }
 
         private async Task LoadExpenditureHeadsAsync(
