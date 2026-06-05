@@ -8,6 +8,14 @@
 
 <br/>
 
+<br/>
+
+🔴 Live Demo
+https://authplatform-mvc.livelymeadow-5854e5ea.germanywestcentral.azurecontainerapps.io/
+
+Deployed on Azure Container Apps (Germany West Central) via GitHub Actions CI/CD pipeline.
+Every push to master automatically builds, containerises, and deploys both the API and MVC.
+
 ![ASP.NET Core](https://img.shields.io/badge/ASP.NET%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
