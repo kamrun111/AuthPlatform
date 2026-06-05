@@ -8,7 +8,6 @@
 
 <br/>
 
-<br/>
 
 🔴 Live Demo
 https://authplatform-mvc.livelymeadow-5854e5ea.germanywestcentral.azurecontainerapps.io/
